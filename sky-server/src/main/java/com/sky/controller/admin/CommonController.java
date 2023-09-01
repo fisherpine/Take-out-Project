@@ -1,5 +1,6 @@
 package com.sky.controller.admin;
 
+import com.sky.constant.MessageConstant;
 import com.sky.result.Result;
 import io.lettuce.core.support.BasePool;
 import io.swagger.annotations.Api;
@@ -56,12 +57,11 @@ public class CommonController {
         }
         try {
             file.transferTo(new File(basePath + fileName));
+            String path = "http://localhost:"+ port + "/image/"+ fileName;
+            return Result.success(path);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("文件上传失败：{}",e);
         }
-
-        String path = "http://localhost:"+ port + "/image/"+ fileName;
-        System.out.println(path);
-        return Result.success(path);
+        return Result.error(MessageConstant.UPLOAD_FAILED);
     }
 }
