@@ -30,8 +30,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
     @Autowired
     private JwtTokenAdminInterceptor jwtTokenAdminInterceptor;
-    @Value("sky.path")
-    private String basePath;
+
 
     /**
      * 注册自定义拦截器
@@ -58,9 +57,33 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 .description("外卖项目接口文档")
                 .build();
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                .groupName("管理端接口")
                 .apiInfo(apiInfo)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.sky.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.sky.controller.admin"))
+                .paths(PathSelectors.any())
+                .build();
+        log.info("生成接口文档成功...");
+        return docket;
+    }
+
+    /**
+     * 通过knife4j生成接口文档
+     * @return
+     */
+    @Bean
+    public Docket docket2() {
+        log.info("准备生成接口文档...");
+        ApiInfo apiInfo = new ApiInfoBuilder()
+                .title("外卖项目接口文档")
+                .version("2.0")
+                .description("外卖项目接口文档")
+                .build();
+        Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                .groupName("用户端接口")
+                .apiInfo(apiInfo)
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.sky.controller.user"))
                 .paths(PathSelectors.any())
                 .build();
         return docket;
