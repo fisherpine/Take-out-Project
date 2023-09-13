@@ -43,7 +43,7 @@ public class DishController {
 
         //清理缓存数据
         String key = "dish_"+dishDTO.getCategoryId();
-        redisTemplate.delete(key);
+        cleanCache(key);
         return Result.success();
     }
 
@@ -72,8 +72,7 @@ public class DishController {
         dishService.deleteBatch(ids);
 
         //将所有的菜品缓存数据清除掉，所有以dish_开头的key
-        Set keys = redisTemplate.keys("dish_*");
-        redisTemplate.delete(keys);
+        cleanCache("dish_*");
         return Result.success();
     }
 
@@ -102,8 +101,7 @@ public class DishController {
         dishService.updateWithFlavor(dishDTO);
 
         //将所有的菜品缓存数据清除掉，所有以dish_开头的key
-        Set keys = redisTemplate.keys("dish_*");
-        redisTemplate.delete(keys);
+        cleanCache("dish_*");
 
         return Result.success();
     }
@@ -115,4 +113,14 @@ public class DishController {
         dishService.startOrStop(status,id);
         return Result.success();
     }
+
+    /**
+     * 清理缓存数据
+     * @param pattern
+     */
+    public void cleanCache(String pattern){
+        Set keys = redisTemplate.keys(pattern);
+        redisTemplate.delete(keys);
+    }
+
 }
