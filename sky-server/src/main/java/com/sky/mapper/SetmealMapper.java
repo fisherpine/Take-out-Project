@@ -44,4 +44,7 @@ public interface SetmealMapper {
      */
     @AutoFill(OperationType.INSERT)
     void insert(Setmeal setmeal);
+
+    @Select("select * from setmeal_dish where setmeal_id = #{setmealId}")
+    Setmeal getById(Long setmealId);
 }
