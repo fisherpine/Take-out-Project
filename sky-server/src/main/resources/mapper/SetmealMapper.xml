@@ -2,20 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.sky.mapper.SetmealMapper">
+    <insert id="insert" parameterType="Setmeal" useGeneratedKeys="true" keyProperty="id">
+        insert into setmeal
+        (category_id, name, price, status, description, image, create_time, update_time, create_user, update_user)
+        values (#{categoryId}, #{name}, #{price}, #{status}, #{description}, #{image}, #{createTime}, #{updateTime},
+                #{createUser}, #{updateUser})
+    </insert>
 
 
-    <select resultType="Setmeal" parameterType="Setmeal" id="list">
+    <select id="list" resultType="Setmeal" parameterType="Setmeal" >
         select * from setmeal
-
-        -<where>
-
+        <where>
         <if test="name != null">and name like concat('%',#{name},'%') </if>
-
         <if test="categoryId != null">and category_id = #{categoryId} </if>
-
         <if test="status != null">and status = #{status} </if>
-
-    </where>
-
+         </where>
     </select>
 </mapper>

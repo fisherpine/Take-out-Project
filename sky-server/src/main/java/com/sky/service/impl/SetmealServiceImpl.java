@@ -57,4 +57,75 @@ public class SetmealServiceImpl implements SetmealService {
     public List<DishItemVO> getDishItemById(Long id) {
         return setmealMapper.getDishItemBySetmealId(id);
     }
+
+    /**
+     * 新增菜品，同时需要保存套餐和菜品的关联关系
+     * @param setmealDTO
+     */
+    @Override
+    @Transactional
+    public void saveWithDish(SetmealDTO setmealDTO) {
+        Setmeal setmeal = new Setmeal();
+        BeanUtils.copyProperties(setmealDTO,setmeal);
+        //向套餐表中插入数据
+        setmealMapper.insert(setmeal);
+        //获取生成的套餐id
+        Long setmealId = setmeal.getId();
+        //得到套餐中的菜品，给每个菜品添加套餐id
+        List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
+        setmealDishes.forEach(setmealDish -> {
+            setmealDish.setSetmealId(setmealId);
+        });
+
+        //保存套餐和菜品的关联关系
+        setmealDishMapper.insertBatch(setmealDishes);
+    }
+
+    /**
+     * 分页查询
+     * @param setmealPageQueryDTO
+     * @return
+     */
+    @Override
+    public PageResult pageQuery(SetmealPageQueryDTO setmealPageQueryDTO) {
+        return null;
+    }
+
+    /**
+     * 批量删除
+     * @param ids
+     */
+    @Override
+    public void deleteBatch(List<Long> ids) {
+
+    }
+
+    /**
+     * 根据id查询套餐
+     * @param id
+     * @return
+     */
+    @Override
+    public SetmealVO getByIdWithDish(Long id) {
+        return null;
+    }
+
+    /**
+     * 修改套餐
+     * @param setmealDTO
+     */
+    @Override
+    public void update(SetmealDTO setmealDTO) {
+
+    }
+
+    /**
+     * 停售或起售菜单
+     * @param status
+     * @param id
+     */
+    @Override
+    public void startOrStop(Integer status, Long id) {
+
+    }
 }
